@@ -124,8 +124,8 @@ app.post('/brew', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
     query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur, req.body.zubereitet, req.body.Notiz])
-    .then((result) => {
-        res.send(result);
+    .then((result) => {                
+        res.send({id: result.insertId});
     }).catch((err) => {
         res.send(err);
     })
@@ -171,7 +171,7 @@ app.post('/save-rezept', (req, res) => {
 
 app.put('/brew-exists', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
-    query('SELECT * FROM Brühung WHERE BohnenName = ? AND BrühmethodenName = ? AND GetränkeMenge = ? AND Mahlgrad = ? AND BohnenMenge = ? AND Brühtemperatur = ? AND Notiz = ?', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur, req.body.Notiz]).then((result) => {        
+    query('SELECT * FROM Brühung WHERE BohnenName = ? AND BrühmethodenName = ? AND GetränkeMenge = ? AND Mahlgrad = ? AND BohnenMenge = ? AND Brühtemperatur = ?', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur]).then((result) => {               
         res.send(result);
     }).catch((err) => {
         res.send(err);
@@ -210,7 +210,6 @@ function insertNewRecipe(req, res) {
 
 function updateRecipe(req, res) {
     query('UPDATE Rezept SET brühID = ? WHERE methodenName = ? AND bohnenName = ?;', [req.body.BrühID, req.body.Methode, req.body.Bohne]).then((result) => {
-        console.log(result);
         res.send(result);
     }).catch((err) => {
         res.send(err);
