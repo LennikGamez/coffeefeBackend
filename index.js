@@ -160,4 +160,14 @@ app.put('/brew-count', (req, res) => {
 });
 
 
+app.put('/reduce-bean', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+    query('UPDATE Bohne SET VorhandendeMenge = VorhandendeMenge - ? WHERE Name = ?', [req.body.BohnenMenge, req.body.BohnenName]).then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+});
+
+
 app.listen(3000);
