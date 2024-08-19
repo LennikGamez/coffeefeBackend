@@ -154,11 +154,18 @@ app.get('/rezept/:methode/:bohne', (req, res) => {
     })
 });
 
-app.put('/make-rezept/:brühID/:methode/:bohne', (req, res) => {
-    query('UPDATE Rezept SET brühID = ? WHERE methodenName = ? AND bohnenName = ?', [req.params.brühID, req.params.methode, req.params.bohne]).then((result) => {
-        res.send(result);
-    }).catch((err) => {
-        res.send(err);
+app.post('/save-rezept', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    // check if rezept already exists
+    query('SELECT * FROM Rezept WHERE methodenName = ? AND bohnenName = ?;', [req.body.Methode, req.body.Bohne]).then((result) => {
+        if (result.length > 0) {
+            // if rezept already exists, update it            
+            updateRecipe(req, res);
+        } else {
+            // if rezept doesn't exist, insert it
+            insertNewRecipe(req, res);
+        }
     })
 });
 
@@ -192,3 +199,20 @@ app.put('/reduce-bean', (req, res) => {
 
 
 app.listen(3000);
+
+function insertNewRecipe(req, res) {
+    query('INSERT INTO Rezept (brühID, methodenName, bohnenName) VALUES (?, ?, ?);', [req.body.BrühID, req.body.Methode, req.body.Bohne]).then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+}
+
+function updateRecipe(req, res) {
+    query('UPDATE Rezept SET brühID = ? WHERE methodenName = ? AND bohnenName = ?;', [req.body.BrühID, req.body.Methode, req.body.Bohne]).then((result) => {
+        console.log(result);
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+}
