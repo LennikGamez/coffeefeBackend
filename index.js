@@ -85,6 +85,18 @@ app.delete('/beans/:name', (req, res) => {
     });
 });
 
+app.get('/beannames', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('SELECT Name FROM Bohne').then((result) => {
+        res.json(result.map(obj => obj.Name));
+    }).catch((err) => {
+        res.send(err);
+    })
+});
+
+
+// Methods
 
 app.get('/methods', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
@@ -96,14 +108,56 @@ app.get('/methods', (req, res) => {
     })
 });
 
-app.get('/beannames', (req, res) => {
+// Brühung
+
+app.post('/brew', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
-    query('SELECT Name FROM Bohne').then((result) => {
-        res.json(result.map(obj => obj.Name));
+    query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur, req.body.zubereitet, req.body.Notiz])
+    .then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+
+
+app.get('/rezept/:methode/:bohne', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('SELECT * FROM Rezept R INNER JOIN Brühung B ON B.BrühID = R.brühID WHERE R.methodenName = ? AND B.bohnenName = ?', [req.params.methode, req.params.bohne]).then((result) => {
+        res.json(result);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+});
+
+app.put('/make-rezept/:brühID/:methode/:bohne', (req, res) => {
+    query('UPDATE Rezept SET brühID = ? WHERE methodenName = ? AND bohnenName = ?', [req.params.brühID, req.params.methode, req.params.bohne]).then((result) => {
+        res.send(result);
     }).catch((err) => {
         res.send(err);
     })
 });
+
+app.put('/brew-exists', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+    query('SELECT * FROM Brühung WHERE BohnenName = ? AND BrühmethodenName = ? AND GetränkeMenge = ? AND Mahlgrad = ? AND BohnenMenge = ? AND Brühtemperatur = ? AND Notiz = ?', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur, req.body.Notiz]).then((result) => {        
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    })
+});
+
+app.put('/brew-count', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('UPDATE Brühung SET zubereitet = zubereitet + 1 WHERE BrühID = ?', [req.body.BrühID]).then((result) => {
+    }).catch((err) => {
+        res.send(err);
+    })
+});
+
 
 app.listen(3000);
