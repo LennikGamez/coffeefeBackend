@@ -50,6 +50,16 @@ app.get('/beans/:name', (req, res) => {
     });
 });
 
+app.get('/beans-count/:name', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('SELECT VorhandendeMenge FROM Bohne WHERE Name = ?', [req.params.name]).then((result) => {
+        res.json(result[0].VorhandendeMenge);
+    }).catch((err) => {
+        res.send(err);
+    });
+});
+
 app.post('/beans', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
@@ -126,7 +136,18 @@ app.get('/rezept/:methode/:bohne', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
     query('SELECT * FROM Rezept R INNER JOIN Brühung B ON B.BrühID = R.brühID WHERE R.methodenName = ? AND B.bohnenName = ?', [req.params.methode, req.params.bohne]).then((result) => {
-        res.json(result);
+        const data = {
+            BrühID: result[0].BrühID,
+            BohnenName: result[0].BohnenName,
+            BrühmethodenName: result[0].BrühmethodenName,
+            GetränkeMenge: result[0].Getränkemenge,
+            Mahlgrad: result[0].Mahlgrad,
+            BohnenMenge: result[0].Bohnenmenge,
+            Brühtemperatur: result[0].Brühtemperatur,
+            zubereitet: result[0].zubereitet,
+            Notiz: result[0].Notiz
+        }
+        res.json(data);
     })
     .catch((err) => {
         res.send(err);
