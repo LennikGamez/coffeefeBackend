@@ -120,6 +120,16 @@ app.get('/methods', (req, res) => {
 
 // Brühung
 
+app.get('/brews', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('SELECT * FROM Brühung').then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+});
+
 app.post('/brew', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
