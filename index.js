@@ -201,7 +201,7 @@ app.post('/save-rezept', (req, res) => {
 
 app.put('/brew-exists', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
-    query('SELECT * FROM Brühung WHERE BohnenName = ? AND BrühmethodenName = ? AND GetränkeMenge = ? AND Mahlgrad = ? AND BohnenMenge = ? AND Brühtemperatur = ?', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur]).then((result) => {               
+    query('SELECT * FROM Brühung WHERE BohnenName = ? AND BrühmethodenName = ? AND Getränkemenge = ? AND Mahlgrad = ? AND Bohnenmenge = ? AND Brühtemperatur = ?', [req.body.BohnenName, req.body.BrühmethodenName, req.body.Getränkemenge, req.body.Mahlgrad, req.body.Bohnenmenge, req.body.Brühtemperatur]).then((result) => {               
         res.send(result);
     }).catch((err) => {
         res.send(err);
@@ -220,7 +220,7 @@ app.put('/brew-count', (req, res) => {
 
 app.put('/reduce-bean', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
-    query('UPDATE Bohne SET VorhandendeMenge = VorhandendeMenge - ? WHERE Name = ?', [req.body.BohnenMenge, req.body.BohnenName]).then((result) => {
+    query('UPDATE Bohne SET VorhandendeMenge = VorhandendeMenge - ? WHERE Name = ?', [req.body.Bohnenmenge, req.body.BohnenName]).then((result) => {
         res.send(result);
     }).catch((err) => {
         res.send(err);
