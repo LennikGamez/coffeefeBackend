@@ -133,7 +133,7 @@ app.get('/brews', (req, res) => {
 app.post('/brew', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
-    query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, req.body.GetränkeMenge, req.body.Mahlgrad, req.body.BohnenMenge, req.body.Brühtemperatur, req.body.zubereitet, req.body.Notiz])
+    query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, req.body.Getränkemenge, req.body.Mahlgrad, req.body.Bohnenmenge, req.body.Brühtemperatur, req.body.zubereitet, req.body.Notiz])
     .then((result) => {                
         res.send({id: result.insertId});
     }).catch((err) => {
