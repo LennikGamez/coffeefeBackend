@@ -11,6 +11,12 @@ let DBCONNECTION = mysql.createConnection({
     password: PASSWORD
 });
 
+
+setInterval(() => {
+    DBCONNECTION.query('SELECT 1;')
+}, 600000 * 6); // Every hour the connection gets updated to prevent disconnection
+
+
 function query(sql, values) {
     return new Promise((resolve, reject) => {
         DBCONNECTION.query(sql, values, (err, result) => {
