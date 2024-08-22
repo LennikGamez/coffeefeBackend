@@ -160,9 +160,9 @@ app.get('/rezept/:methode/:bohne', (req, res) => {
             BrühID: result[0].BrühID,
             BohnenName: result[0].BohnenName,
             BrühmethodenName: result[0].BrühmethodenName,
-            GetränkeMenge: result[0].Getränkemenge,
+            Getränkemenge: result[0].Getränkemenge,
             Mahlgrad: result[0].Mahlgrad,
-            BohnenMenge: result[0].Bohnenmenge,
+            Bohnenmenge: result[0].Bohnenmenge,
             Brühtemperatur: result[0].Brühtemperatur,
             zubereitet: result[0].zubereitet,
             Notiz: result[0].Notiz
