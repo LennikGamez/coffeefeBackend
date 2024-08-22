@@ -141,6 +141,16 @@ app.post('/brew', (req, res) => {
     })
 })
 
+app.delete('/brew', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('DELETE FROM Brühung WHERE BrühID = ?', [req.body.id]).then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+});
+
 
 app.get('/rezept/:methode/:bohne', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
