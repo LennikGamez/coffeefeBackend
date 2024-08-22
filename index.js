@@ -174,6 +174,16 @@ app.get('/rezept/:methode/:bohne', (req, res) => {
     })
 });
 
+app.delete('/rezept/:methode/:bohne', (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", '*');
+
+    query('DELETE FROM Rezept WHERE methodenName = ? AND bohnenName = ?', [req.params.methode, req.params.bohne]).then((result) => {
+        res.send(result);
+    }).catch((err) => {
+        res.send(err);
+    });
+});
+
 app.post('/save-rezept', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
