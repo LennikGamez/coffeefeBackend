@@ -98,7 +98,7 @@ app.post('/beans', (req, res) => {
 app.put('/beans/:name', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
 
-    query('UPDATE Bohne SET Name = ?, Röster = ?, Website = ?, Notiz = ?, VorhandendeMenge = ?, Röstgrad = ? WHERE Name = ?', [req.body.Name, req.body.Röster, req.body.Website, req.body.Notiz, req.body.VorhandendeMenge, req.body.Röstgrad, req.params.name])
+    query('UPDATE Bohne SET Name = ?, Röster = ?, Website = ?, Notiz = ?, VorhandendeMenge = ?, Röstgrad = ? WHERE Name = ?', [req.params.name, req.body.Röster, req.body.Website, req.body.Notiz, req.body.VorhandendeMenge, req.body.Röstgrad, req.body.Name])
     .then((result) => {
         res.send(result);
     }).catch((err) => {
