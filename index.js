@@ -4,12 +4,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-let DBCONNECTION = mysql.createConnection({
-    host: '192.168.178.120',
-    user: 'coffeefe',
-    database: 'Kaffee',
-    password: PASSWORD
-});
+let DBCONNECTION;
+function connect(){
+    DBCONNECTION = mysql.createConnection({
+        host: '192.168.178.120',
+        user: 'coffeefe',
+        database: 'Kaffee',
+        password: PASSWORD
+    });
+    DBCONNECTION.connect((err) => {
+        if (err) {
+            return;
+        } else {
+            console.log('Connected to the database!');
+        }
+    })
+    DBCONNECTION.on('error', (err)=>{
+        console.log("Whoopsies-",err);
+        setTimeout(connect, 5000);
+    })
+   
+}
+connect();
 
 
 setInterval(() => {
@@ -138,8 +154,9 @@ app.get('/brews', (req, res) => {
 
 app.post('/brew', (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", '*');
+    console.log(req.body);
 
-    query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, req.body.Getränkemenge, req.body.Mahlgrad, req.body.Bohnenmenge, req.body.Brühtemperatur, req.body.zubereitet, req.body.Notiz])
+    query('INSERT INTO Brühung (BohnenName, BrühmethodenName, Getränkemenge, Mahlgrad, Bohnenmenge, Brühtemperatur, zubereitet, Notiz) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [req.body.BohnenName, req.body.BrühmethodenName, parseFloat(req.body.Getränkemenge), parseFloat(req.body.Mahlgrad), parseFloat(req.body.Bohnenmenge), parseFloat(req.body.Brühtemperatur), req.body.zubereitet, req.body.Notiz])
     .then((result) => {                
         res.send({id: result.insertId});
     }).catch((err) => {
