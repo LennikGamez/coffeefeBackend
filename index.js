@@ -100,6 +100,12 @@ app.put('/beans/:name', (req, res) => {
 
     query('UPDATE Bohne SET Name = ?, Röster = ?, Website = ?, Notiz = ?, VorhandendeMenge = ?, Röstgrad = ? WHERE Name = ?', [req.body.Name, req.body.Röster, req.body.Website, req.body.Notiz, req.body.VorhandendeMenge, req.body.Röstgrad, req.params.name])
     .then((result) => {
+        // update the name in the Rezept table as well
+        query('UPDATE Rezept SET bohnenName = ? WHERE bohnenName = ?', [req.body.Name, req.params.name]).then((result) => {
+            console.log(result);
+        }).catch((err) => {
+            console.log(err);
+        });
         res.send(result);
     }).catch((err) => {
         res.send(err);
